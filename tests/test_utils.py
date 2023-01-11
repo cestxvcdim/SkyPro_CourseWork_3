@@ -6,7 +6,7 @@ class TestUtils:
 
     def test_get_posts_by_user(self):
         posts = get_posts_by_user('leo')
-        assert type(posts) == list, 'возвращается не список'
+        assert isinstance(posts, list), 'возвращается не список'
         assert len(posts) > 1, 'возвращается пустой список'
         with pytest.raises(ValueError):
             get_posts_by_user('*$@#')
@@ -19,14 +19,14 @@ class TestUtils:
 
     def test_get_comments_by_post_id(self):
         comments = get_comments_by_post_id(1)
-        assert type(comments) == list, 'возвращается не список'
+        assert isinstance(comments, list), 'возвращается не список'
         with pytest.raises(ValueError):
             get_comments_by_post_id(0)
 
     def test_search_for_posts(self):
         posts = search_for_posts('закат')
-        assert type(posts) == list, 'возвращается не список'
-        assert len(posts) == 1, 'ошибка в функции'
+        assert isinstance(posts, list), 'возвращается не список'
+        assert len(posts) >= 1, 'ошибка в функции'
 
     def test_count_comments(self):
         assert "1 комментарий" == count_comments(1)

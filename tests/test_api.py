@@ -1,36 +1,37 @@
 import pytest
 from app import app
-
-keys_should_be = [
-    "poster_name"
-    "poster_avatar"
-    "pic"
-    "content"
-    "views_count"
-    "likes_count"
-    "pk"
-]
+from utils import get_posts_all
 
 
-class TestApi:
-
-    def test_api_posts(self):
+class TestAPI:
+    def test_api_type_all(self):
         response = app.test_client().get('/api/posts')
-        wrong_json = []
-        for post in response.json:
-            for key in keys_should_be:
-                if post.get(key) is None:
-                    wrong_json.append(post)
+        assert response.data[0] == ord("[")
 
-        assert isinstance(response.json, list), "Wrong data"
-        assert wrong_json == [], "Wrong JSON"
+    def test_api_type_concrete(self):
+        response = app.test_client().get('/api/posts/1')
+        assert response.data[0] == ord("{")
 
-    def test_api_post(self):
-        response = app.test_client().get("/api/posts/1")
-        wrong_dicts = []
-        for key in keys_should_be:
-            if response.json.get(key) is None:
-                wrong_dicts.append(key)
+    def test_api_content_all(self):
+        response = app.test_client().get('/api/posts')
+        for i in range(len(response.json)):
+            assert response.json[i].get("poster_name") == get_posts_all()[i]["poster_name"]
+            assert response.json[i].get("poster_avatar") == get_posts_all()[i]["poster_avatar"]
+            assert response.json[i].get("pic") == get_posts_all()[i]["pic"]
+            assert response.json[i].get("content") == get_posts_all()[i]["content"]
+            assert response.json[i].get("views_count") == get_posts_all()[i]["views_count"]
+            assert response.json[i].get("likes_count") == get_posts_all()[i]["likes_count"]
+            assert response.json[i].get("pk") == get_posts_all()[i]["pk"]
 
-        assert isinstance(response.json, dict), "Wrong data"
-        assert wrong_dicts == [], "Wrong dict(s)"
+    def test_api_content_concrete(self):
+        response = app.test_client().get('/api/posts/1')
+        assert response.json.get("poster_name") == "leo"
+        assert response.json.get("poster_avatar") == "https://randus.org/avatars/w/c1819dbdffffff18.png"
+        assert response.json.get(
+            "pic") == "https://images.unsplash.com/photo-1525351326368-efbb5cb6814d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=580&q=80"
+        assert response.json.get(
+            "content") == "Ага, опять еда! Квадратная тарелка в квадратном кадре. А на тарелке, наверное, пирог! Мне было так жаль, что я не могу ее съесть. Я боялась, что они заметят, и если я не съем это, то, значит, они все подумают, что я плохая девочка... Но потом мне вспомнилось, как они на меня смотрели. Когда я была маленькой, на кухне всегда были родители, бабушка, дедушка, дядя Борис... Все вместе. И всегда одна я, потому что все остальные приходили туда лишь изредка. Мне казалось, если бы все ходили на работу, как и я, в этот свой офис, было бы совсем неинтересно."
+        assert response.json.get("views_count") == 376
+        assert response.json.get("likes_count") == 154
+        assert response.json.get("pk") == 1
+

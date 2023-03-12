@@ -34,4 +34,3 @@ class TestAPI:
         assert response.json.get("views_count") == 376
         assert response.json.get("likes_count") == 154
         assert response.json.get("pk") == 1
-

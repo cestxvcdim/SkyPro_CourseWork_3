@@ -11,5 +11,3 @@ def tag_page(tag_name):
         count_posts = len(posts)
         return render_template('tag.html', posts=posts, count_posts=count_posts, tag_name=tag_name)
     return 'По вашему запросу ничего не найдено'
-
-

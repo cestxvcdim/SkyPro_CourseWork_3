@@ -1,10 +1,10 @@
 import logging
 from flask import Flask, jsonify
-from bp_main.views import main_blueprint
-from bp_post.views import post_blueprint
-from bp_search.views import search_blueprint
-from bp_users.views import users_blueprint
-from bp_tags.views import tag_blueprint
+from blueprints.main import main_blueprint
+from blueprints.post import post_blueprint
+from blueprints.search import search_blueprint
+from blueprints.users import user_blueprint
+from blueprints.tag import tag_blueprint
 from utils import get_posts_all, get_post_by_pk
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ app.config["JSON_AS_ASCII"] = False
 app.register_blueprint(main_blueprint)
 app.register_blueprint(post_blueprint)
 app.register_blueprint(search_blueprint)
-app.register_blueprint(users_blueprint)
+app.register_blueprint(user_blueprint)
 app.register_blueprint(tag_blueprint)
 app.static_folder = app.root_path + "/static/"
 
